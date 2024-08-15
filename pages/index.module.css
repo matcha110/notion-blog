@@ -36,7 +36,7 @@
 
 @media (prefers-color-scheme: dark) {
   .heading {
-    border-color: #343539;
+    border-color: #3d3d3d;
   }
 }
 
@@ -63,4 +63,54 @@
   margin-top: 0;
   margin-bottom: 12px;
   opacity: 0.65;
+}
+
+.readArticleLink {
+  color: #9e88e0; /* リンクの色 */
+  font-weight: bold; /* フォントの太さ */
+  text-decoration: none; /* 下線を非表示 */
+  background-color: #f0f0f0; /* 背景色 */
+  padding: 8px 16px; /* パディング */
+  border-radius: 4px; /* 角の丸み */
+  transition: background-color 0.3s; /* 背景色の変化を滑らかに */
+}
+
+.readArticleLink:hover {
+  background-color: #c7a6e0; /* ホバー時の背景色 */
+  color: white; /* ホバー時のテキスト色 */
+  text-decoration: underline; /* ホバー時に下線を表示 */
+}
+
+.postFooter {
+  display: flex;
+  justify-content: space-between; /* アイテムを両端に配置 */
+  align-items: center; /* アイテムを垂直方向の中央に配置 */
+  padding: 8px 0; /* 上下のパディングを追加 */
+}
+
+.postDescription {
+  text-align: left;
+}
+
+.paginationLink {
+  display: inline-block;
+  padding: 10px 20px;
+  margin: 20px;
+  border: 1px solid #ccc; /* 枠線の色と太さ */
+  background-color: #f9f9f9; /* 背景色 */
+  text-decoration: none;
+  color: #85bec9; /* テキストの色 */
+  font-weight: bold; /* テキストの太さ */
+  width: 130px; /* 固定幅 */
+  text-align: center; /* テキストをボタンの中央に配置 */
+}
+
+.paginationLink:hover {
+  background-color: #85bec9; /* ホバー時の背景色 */
+  color: #f9f9f9; /* テキストの色 */
+}
+
+.pagination {
+  text-align: center; /* ページネーションリンクの中央揃え */
+  margin-top: 40px; /* ページネーションの上部マージン */
 }

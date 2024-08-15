@@ -5,8 +5,9 @@ import { Text } from "./[id].js";
 import styles from "./index.module.css";
 
 export const databaseId = process.env.NOTION_DATABASE_ID;
+const POSTS_PER_PAGE = 5;
 
-export default function Home({ posts }) {
+export default function Home({ posts, page, numPages }) {
   return (
     <div>
       <Head>
@@ -56,47 +57,63 @@ export default function Home({ posts }) {
         <h2 className={styles.heading}>All Articles</h2>
         <ol className={styles.posts}>
           {posts.map((post) => {
-            const date = new Date(post.last_edited_time).toLocaleString(
-              "en-US",
-              {
-                month: "short",
-                day: "2-digit",
-                year: "numeric",
-              }
-            );
+            const date = new Date(post.last_edited_time).toLocaleString("en-US", {
+              month: "short",
+              day: "2-digit",
+              year: "numeric",
+            });
 
             return (
               <li key={post.id} className={styles.post}>
                 <h3 className={styles.postTitle}>
                   <Link href={`/${post.id}`}>
                     <a>
-                      {/* text部分にはpost.properties['名前'].title: 配列要素を渡す必要があるため注意が必要 */}
                       <Text text={post.properties['名前'].title} />
                     </a>
                   </Link>
                 </h3>
-
-                <p className={styles.postDescription}>{date}</p>
-                <Link href={`/${post.id}`}>
-                  <a> Read article →</a>
-                </Link>
+                <div className={styles.postFooter}>
+                  <p className={styles.postDescription}>{date}</p>
+                  <Link href={`/${post.id}`}>
+                    <a className={styles.readArticleLink}>Read article →</a>
+                  </Link>
+                </div>
               </li>
             );
+            
           })}
         </ol>
+
+        <div className={styles.pagination}>
+           {/* 2ページ目以降で表示する */}
+          {page > 1 && (
+            <Link href={`/?page=${page - 1}`}>
+              <a className={styles.paginationLink}>← Previous</a>
+            </Link>
+          )}
+           {/* 最終ページより前のページで表示する */}
+          {page < numPages && (
+            <Link href={`/?page=${page + 1}`}>
+              <a className={styles.paginationLink}>Next →</a>
+            </Link>
+          )}
+        </div>
       </main>
     </div>
   );
 }
 
-//SSG, ISRを追加
-export const getStaticProps = async () => {
+export async function getServerSideProps(context) {
+  const page = parseInt(context.query.page) || 1;
   const database = await getDatabase(databaseId);
+  const numPages = Math.ceil(database.length / POSTS_PER_PAGE);
+  const posts = database.slice((page - 1) * POSTS_PER_PAGE, page * POSTS_PER_PAGE);
 
   return {
     props: {
-      posts: database,
+      posts,
+      page,
+      numPages,
     },
-    revalidate: 1,
   };
-};
+}
